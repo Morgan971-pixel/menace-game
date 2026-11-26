@@ -27,7 +27,29 @@ import type { Rng } from '../engine/rng'
 import { addResults, emptyCurve, markLearned, markPlayer, markTinker, startRun, type Curve } from './curve'
 import { addLosses, emptyDish, type Dish } from './dish'
 import { gamesPlayed, loadSave, noBest, type ChallengeBest, type Saved } from './persist'
-import { challengeEndLine, challengeLostLine, challengeStartLine, challengeWonLine, createSay, milestoneLine, streakBrokenLine, rewardsLine, rulesLine, endLine, firstGameLine, forcedLine, importLine, resetLine, openingLine, resignLine, returningLine, summaryLine, thinkLine, trainLine, trainStartLine } from './lines'
+import {
+  challengeEndLine,
+  challengeLostLine,
+  challengeStartLine,
+  challengeWonLine,
+  createSay,
+  milestoneLine,
+  streakBrokenLine,
+  rewardsLine,
+  rulesLine,
+  endLine,
+  firstGameLine,
+  forcedLine,
+  importLine,
+  resetLine,
+  openingLine,
+  resignLine,
+  returningLine,
+  summaryLine,
+  thinkLine,
+  trainLine,
+  trainStartLine,
+} from './lines'
 
 export type Phase = 'title' | 'menace' | 'player' | 'ledger' | 'over'
 

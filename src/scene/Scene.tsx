@@ -1,5 +1,5 @@
 // The study at night. Camera framing for wide (desktop) and tall (phone portrait) screens.
-import { PerspectiveCamera } from '@react-three/drei'
+import { PerformanceMonitor, PerspectiveCamera } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Object3D, type Group, type PerspectiveCamera as Camera, type SpotLight } from 'three'
@@ -12,6 +12,7 @@ import { Board } from './Board'
 import { Cabinet } from './Cabinet'
 import { beadGeometry, beadMaterials } from './boxParts'
 import { Desk } from './Desk'
+import { Milestone } from './Milestone'
 import { useDishBeads } from './dishBeads'
 import { PALETTE, type Placement } from './geometry'
 import { Lamp } from './Lamp'
@@ -114,6 +115,7 @@ function World() {
       <Lamp />
       <Desk dish={layout.dish} />
       <Cabinet />
+      <Milestone />
       <Board />
       {(showBox || item) && <BoxFill present={layout.present} />}
       {showBox && <ActiveBox key={turn.id} turn={turn} present={layout.present} board={layout.board} />}
@@ -125,9 +127,26 @@ function World() {
   )
 }
 
+/** Few cores or little memory: start in low quality (pixel ratio 1, no shadows). */
+function weakDevice(): boolean {
+  if (typeof navigator === 'undefined') return false
+  const n = navigator as Navigator & { deviceMemory?: number }
+  return (n.hardwareConcurrency ?? 8) <= 4 || (n.deviceMemory ?? 8) <= 4
+}
+
 export function Scene() {
+  // Drops to low quality, once, if the frame rate falls; never climbs back mid-game.
+  const [low, setLow] = useState(weakDevice)
   return (
-    <Canvas shadows="percentage" dpr={[1, 2]} className="scene" aria-label="Michie's study: the cabinet of matchboxes and the board">
+    <Canvas
+      shadows={low ? false : 'percentage'}
+      dpr={low ? 1 : [1, 2]}
+      className="scene"
+      role="img"
+      aria-label="Michie's study: the cabinet of matchboxes and the board"
+      data-quality={low ? 'low' : 'high'}
+    >
+      <PerformanceMonitor onDecline={() => setLow(true)} />
       <World />
     </Canvas>
   )

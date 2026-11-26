@@ -10,6 +10,7 @@ import { clamp01, DISH, dishSpot, ease, type Placement, type V3 } from './geomet
 import { beadGeometry, beadMaterials, floorY as restY, placeBox, setOpen, useBoxPose } from './boxParts'
 import { MatchBox } from './MatchBox'
 import { LEDGER_TIMELINE as TL } from './timing'
+import { motionRate } from './motion'
 import { trayTransition } from './trayLayout'
 
 const prog = (t: number, [a, b]: readonly [number, number]) => clamp01((t - a) / (b - a))
@@ -63,7 +64,7 @@ export function LedgerBox({ index, item, present, dish, dishIndex }: Props) {
     // The inspector is open: the ledger waits exactly here.
     if (inspector.getState().slot !== null) return
     // game time: real time x speed; a long frame (tab in the background) is clamped
-    clock.current += Math.min(delta, 0.25) * game.getState().speed
+    clock.current += Math.min(delta, 0.25) * game.getState().speed * motionRate()
     const t = clock.current
     const { es } = pose
 

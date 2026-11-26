@@ -110,7 +110,8 @@ export function trayLayout(beads: readonly (number | null)[], cap = TRAY_CAP): T
   const out: TrayBead[] = []
   const tags: TrayTag[] = []
   draw.forEach((n, square) => {
-    if (scaled && n > 0) tags.push({ square, count: real[square] })
+    // Every colour in the box gets a tag with its square number and true count (colour is never the only cue).
+    if (real[square] > 0) tags.push({ square, count: real[square] })
     for (let k = 0; k < n; k++) out.push({ square, ...spot(out.length) })
   })
   return { beads: out, radius, pitch, scaled, tags }

@@ -8,6 +8,7 @@ import { blockers } from '../state/blockers'
 import { tips } from '../state/tips'
 import { blocksGameKey } from './panelKeys'
 import { useEscape } from './useEscape'
+import { SoundToggle } from './SoundToggle'
 
 interface Note {
   kind: 'ok' | 'error'
@@ -138,6 +139,7 @@ export function MachineMenu({ onTinker }: { onTinker: () => void }) {
       >
         Machine
       </button>
+      <SoundToggle />
       {open && (
         <div ref={panel} id={panelId} className="machine__panel" role="dialog" aria-label="The machine">
           <h2 className="machine__title">The machine</h2>

@@ -9,6 +9,7 @@ import { BEAD_COLORS, BOX, clamp01, ease, markWorld, type BoardPlacement, type P
 import { beadGeometry, beadMaterials, floorY as restY, placeBox, setOpen, useBoxPose } from './boxParts'
 import { MatchBox } from './MatchBox'
 import { TURN_TIMELINE as TL } from './timing'
+import { motionRate, reducedMotion } from './motion'
 import { drawnIndex, trayLayout } from './trayLayout'
 
 const prog = (t: number, [a, b]: readonly [number, number]) => clamp01((t - a) / (b - a))
@@ -42,7 +43,7 @@ export function ActiveBox({ turn, present, board }: { turn: MenaceTurn; present:
     const fp = flap.current
     const fl = flyer.current
     if (!g || !tr || !fp || !fl) return
-    clock.current += Math.min(delta, 0.1)
+    clock.current += Math.min(delta, 0.1) * motionRate()
     const t = clock.current
     const { es } = pose
 
@@ -52,7 +53,7 @@ export function ActiveBox({ turn, present, board }: { turn: MenaceTurn; present:
     const shaking = t > TL.shake[0] && t < TL.shake[1]
     if (shaking) {
       const s = prog(t, TL.shake)
-      const a = Math.sin(s * Math.PI * 14) * 0.05 * (1 - s)
+      const a = reducedMotion() ? 0 : Math.sin(s * Math.PI * 14) * 0.05 * (1 - s)
       g.rotateZ(a)
       g.rotateX(a * 0.5)
     }
@@ -69,7 +70,7 @@ export function ActiveBox({ turn, present, board }: { turn: MenaceTurn; present:
 
     const open = t < TL.close[0] ? ease(prog(t, TL.open)) : 1 - ease(prog(t, TL.close))
     setOpen(tr, fp, open)
-    // Count tags (only for a box past the drawing cap) show while the tray is open.
+    // Number tags (square and true count per colour) show while the tray is open.
     if (tagBox.current) tagBox.current.style.opacity = open > 0.95 && t < TL.close[0] ? '1' : '0'
 
     if (t >= TL.bead[0] && t < TL.bead[1] && chosen >= 0) {
@@ -113,13 +114,13 @@ export function ActiveBox({ turn, present, board }: { turn: MenaceTurn; present:
             scale={r}
           />
         ))}
-        {layout.scaled && (
+        {layout.tags.length > 0 && (
           <Html position={[0, -h / 2, d / 2 + 0.02]} zIndexRange={[15, 0]} pointerEvents="none">
             <div ref={tagBox} className="bead-tags" style={{ opacity: 0 }} aria-hidden="true">
               {layout.tags.map((tag) => (
                 <span key={tag.square} className="bead-tag" style={{ borderColor: BEAD_COLORS[tag.square] }}>
                   <i style={{ background: BEAD_COLORS[tag.square] }} />
-                  {tag.count}
+                  <b>{tag.square + 1}</b>×{tag.count}
                 </span>
               ))}
             </div>

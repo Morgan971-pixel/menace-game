@@ -26,7 +26,7 @@ describe('the tray shows the real beads of real boxes', () => {
     expect(real(beads)).toEqual([4, 4, 4, 4, 4, 4, 4, 4, 4])
     expect(drawnPerSquare(beads)).toEqual([4, 4, 4, 4, 4, 4, 4, 4, 4])
     expect(trayLayout(beads).scaled).toBe(false)
-    expect(trayLayout(beads).tags).toEqual([])
+    expect(trayLayout(beads).tags).toEqual(Array.from({ length: 9 }, (_, square) => ({ square, count: 4 })))
   })
 
   it('box 1 after a loss on square 7: one pink bead fewer, and the drawing changes', () => {

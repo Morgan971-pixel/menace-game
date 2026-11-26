@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { blockers } from '../state/blockers'
 import { useInspecting } from '../state/inspecting'
 import { game, useGame, type Phase } from '../state/store'
+import { Announcer } from './Announcer'
 import { CurvePanel } from './CurvePanel'
 import { GameOver } from './GameOver'
 import { HowItWorks } from './HowItWorks'
@@ -70,6 +71,7 @@ export function Hud() {
 
   return (
     <div className="hud">
+      <Announcer />
       {phase === 'title' && <Title onHow={openHow} onTrain={onTrain} onCurve={onCurve} onTinker={onTinker} hidden={inspecting} />}
       {phase !== 'title' && (
         <div ref={gameRegion} className="game-region" tabIndex={-1} aria-label="Game: press 1 to 9 to play a square">

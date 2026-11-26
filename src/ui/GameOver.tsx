@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { game, useGame } from '../state/store'
+import { bestLine } from './challengeText'
 import { useInspecting } from '../state/inspecting'
 import { InspectButton } from './InspectButton'
 
@@ -13,12 +14,19 @@ export function GameOver({ onTrain, onCurve, onTinker }: { onTrain: () => void; 
   // Otherwise a held Enter/Space that skipped the ledger would repeat (or release) into
   // Play again and start a new game before the result is seen.
   const armed = useRef(false)
+  const challenge = useGame((s) => s.challenge)
+  const best = useGame((s) => s.challengeBest)
   if (result === null) return null
-  const title = resigned ? 'MENACE resigns' : result === 'X' ? 'MENACE wins' : result === 'O' ? 'You win' : 'A draw'
+  const outcome = challenge?.outcome ?? null
+  const title =
+    outcome === 'won' ? 'Challenge won'
+    : outcome === 'lost' ? 'Locked out'
+    : resigned ? 'MENACE resigns' : result === 'X' ? 'MENACE wins' : result === 'O' ? 'You win' : 'A draw'
   return (
     <section className={`over over--${result}`} role="alert">
       <h2>{title}</h2>
-      <button
+      {outcome !== null && <p className="over__best">{bestLine(best)}</p>}
+      {outcome === null && <button
         className="btn btn--primary"
         disabled={training}
         autoFocus={!inspecting}
@@ -33,11 +41,17 @@ export function GameOver({ onTrain, onCurve, onTinker }: { onTrain: () => void; 
         }}
       >
         Play again
-      </button>
+      </button>}
+      {challenge !== null && (
+        <button className={`btn${outcome !== null ? ' btn--primary' : ''}`} autoFocus={outcome !== null && !inspecting} onClick={() => game.getState().endChallenge()}>
+          End challenge
+        </button>
+      )}
       <div className="over__more">
-        <button className="btn btn--small" onClick={onTrain}>Train</button>
+        {challenge === null && <button className="btn btn--small" disabled={training} onClick={() => game.getState().startChallenge()}>Challenge</button>}
+        {challenge === null && <button className="btn btn--small" onClick={onTrain}>Train</button>}
         <button className="btn btn--small" onClick={onCurve}>Curve</button>
-        <button className="btn btn--small" onClick={onTinker}>Tinker</button>
+        {challenge === null && <button className="btn btn--small" onClick={onTinker}>Tinker</button>}
         <InspectButton />
       </div>
     </section>

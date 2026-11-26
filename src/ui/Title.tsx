@@ -11,6 +11,7 @@ export function Title({ onHow, onTrain, onCurve, onTinker, hidden }: { onHow: ()
       <p className="title__tag">{engine ? 'Matchboxes, made as it needs them.' : '304 matchboxes.'} It learns from every mistake you let it make.</p>
       <div className="title__actions">
         <button className="btn btn--primary" disabled={training} onClick={() => game.getState().start()}>Play</button>
+        <button className="btn" disabled={training} onClick={() => game.getState().startChallenge()} title="Beat a fresh MENACE before it learns you">Challenge</button>
         <button className="btn" onClick={onHow} aria-haspopup="dialog">How it works</button>
         <button className="btn btn--small" onClick={onTrain}>Train</button>
         <button className="btn btn--small" onClick={onCurve}>Curve</button>

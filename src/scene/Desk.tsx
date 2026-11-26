@@ -48,10 +48,29 @@ export function Desk({ dish }: { dish: V3 }) {
       <Dish at={dish} />
 
       {/* pencil */}
-      <mesh position={[1.0, 0.012, -0.1]} rotation={[0, 0.9, Math.PI / 2]} castShadow>
-        <cylinderGeometry args={[0.012, 0.012, 0.42, 6]} />
-        <meshStandardMaterial color="#2f6e5c" />
-      </mesh>
+      {/* pencil, along its local y: eraser and ferrule at -y, sharpened wood and graphite at +y */}
+      <group position={[1.0, 0.012, -0.1]} rotation={[0, 0.9, Math.PI / 2]}>
+        <mesh castShadow>
+          <cylinderGeometry args={[0.012, 0.012, 0.34, 6]} />
+          <meshStandardMaterial color="#2f6e5c" roughness={0.5} />
+        </mesh>
+        <mesh position={[0, 0.195, 0]} castShadow>
+          <cylinderGeometry args={[0.0035, 0.012, 0.05, 6]} />
+          <meshStandardMaterial color="#d8b98a" roughness={0.8} />
+        </mesh>
+        <mesh position={[0, 0.227, 0]}>
+          <coneGeometry args={[0.0035, 0.014, 12]} />
+          <meshStandardMaterial color="#2a2a2a" roughness={0.4} metalness={0.3} />
+        </mesh>
+        <mesh position={[0, -0.1825, 0]} castShadow>
+          <cylinderGeometry args={[0.0128, 0.0128, 0.025, 16]} />
+          <meshStandardMaterial color="#b9b2a3" metalness={0.85} roughness={0.3} />
+        </mesh>
+        <mesh position={[0, -0.205, 0]} castShadow>
+          <cylinderGeometry args={[0.0118, 0.0118, 0.02, 16]} />
+          <meshStandardMaterial color="#c9848a" roughness={0.9} />
+        </mesh>
+      </group>
     </>
   )
 }

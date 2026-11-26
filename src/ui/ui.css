@@ -55,7 +55,7 @@
   text-shadow: 0 4px 0 var(--night), 0 10px 40px rgba(0, 0, 0, 0.6);
 }
 .title__tag { max-width: 500px; font: italic 400 clamp(19px, 2.2vw, 26px)/1.3 var(--serif); margin: 14px 0 28px; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8); }
-.title__actions { display: flex; gap: 16px; flex-wrap: wrap; pointer-events: auto; }
+.title__actions { display: flex; gap: 16px; flex-wrap: wrap; pointer-events: auto; max-width: 540px; }
 
 /* ---------- how it works ---------- */
 .modal {

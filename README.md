@@ -2,6 +2,10 @@
 
 Play noughts and crosses against MENACE, Donald Michie's 1961 learning machine, and watch it learn you.
 
+**Play it: [menace-game.vercel.app](https://menace-game.vercel.app)**
+
+![MENACE drawing a bead from box 1 in the 3D study](.github/screenshot.jpg)
+
 In 1961 Michie built a player out of 304 matchboxes and coloured beads. Each box stands for a position MENACE can face. To move, it shakes the box for the current position and draws a bead; the bead's colour is the square it plays. After the game, every box it used gets beads added if it won or drew, and loses the drawn bead if it lost. Over a few dozen games, the good moves crowd out the bad ones. It is reinforcement learning with no computer.
 
 This game puts that machine in a 3D study at night. On MENACE's turn the matching box slides out of the cabinet, rattles, and drops a bead on its square. After each game a ledger walks through every box it used and shows the beads going in or out.

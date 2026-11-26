@@ -6,6 +6,8 @@ import { PALETTE } from './geometry'
 import { useLayout } from './layout'
 
 const BRASS = '#a88d55'
+/** Where the shade hangs, relative to the top of the pole (same height). */
+const ARM = { x: 0.18, z: 0.22 }
 
 export function Lamp() {
   // The spot aims at a target object that lives in the scene, centred on the paper.
@@ -28,7 +30,22 @@ export function Lamp() {
           <cylinderGeometry args={[0.018, 0.018, 0.72, 12]} />
           <meshStandardMaterial color={BRASS} metalness={0.8} roughness={0.32} />
         </mesh>
-        <group position={[0.18, 0.74, 0.22]} rotation={[0.35, -0.6, 0]}>
+        {/* arm from the top of the pole to the shade, with a knuckle at each end */}
+        <mesh position={[0, 0.74, 0]}>
+          <sphereGeometry args={[0.026, 16, 12]} />
+          <meshStandardMaterial color={BRASS} metalness={0.8} roughness={0.32} />
+        </mesh>
+        <group position={[ARM.x / 2, 0.74, ARM.z / 2]} rotation={[0, -Math.atan2(ARM.z, ARM.x), 0]}>
+          <mesh rotation={[0, 0, Math.PI / 2]} castShadow>
+            <cylinderGeometry args={[0.016, 0.016, Math.hypot(ARM.x, ARM.z), 12]} />
+            <meshStandardMaterial color={BRASS} metalness={0.8} roughness={0.32} />
+          </mesh>
+        </group>
+        <mesh position={[ARM.x, 0.74, ARM.z]}>
+          <sphereGeometry args={[0.024, 16, 12]} />
+          <meshStandardMaterial color={BRASS} metalness={0.8} roughness={0.32} />
+        </mesh>
+        <group position={[ARM.x, 0.74, ARM.z]} rotation={[0.35, -0.6, 0]}>
           <mesh>
             <cylinderGeometry args={[0.1, 0.24, 0.16, 32, 1, true]} />
             <meshStandardMaterial color="#1f6b4f" roughness={0.25} metalness={0.2} side={2} />
